@@ -40,8 +40,9 @@ public class MineSweeper extends Application{
         for(int i = 0; i<10;i++){
             for(int j = 0; j<10; j++){
                 boardButtons[i][j].setOnAction((e)-> {
-                    Button temp = (Button)e.getSource();
-                    mineClick(temp);
+                    Button nodeClicked = (Button)e.getSource();
+                    mineClick(mineField, nodeClicked);
+                    int surroundingMines = countMines(boardButtons, nodeClicked);
                 });
             }
         }
@@ -78,9 +79,9 @@ public class MineSweeper extends Application{
         }
     }
     
-    public void mineClick(Button nodeClicked){
+    public void mineClick(GridPane board, Button nodeClicked){
         if(nodeClicked instanceof MineNode) {
-        nodeClicked.setStyle("-fx-background-color:black;" +
+            nodeClicked.setStyle("-fx-background-color:black;" +
                     "-fx-background-radius: 0;"
                     + "-fx-border-color:gray;");
         } 
@@ -110,6 +111,58 @@ public class MineSweeper extends Application{
         sweeperStage.setScene(scene);
         sweeperStage.setResizable(false);
         sweeperStage.show();
+    }
+    
+    public int countMines(Button [][] buttons, Button buPressed){
+        int rowNum = GridPane.getRowIndex(buPressed);
+        int colNum = GridPane.getColumnIndex(buPressed);
+        int countMines = 0;
+        
+        if(rowNum -1 > -1 && colNum -1 > -1){
+            if(buttons[rowNum-1][colNum-1] instanceof MineNode){
+                countMines++;
+            }
+        }
+        if(rowNum -1 > -1){
+             if(buttons[rowNum-1][colNum] instanceof MineNode){
+                countMines++;
+            }
+        }
+        if(colNum -1 > -1){
+            if(buttons[rowNum][colNum-1] instanceof MineNode){
+                countMines++;
+            }
+        }
+        if(rowNum +1 < 10 && colNum-1 > -1){
+            if(buttons[rowNum+1][colNum-1] instanceof MineNode){
+                countMines++;
+            }
+        }
+        if(rowNum +1 < 10){
+            if(buttons[rowNum+1][colNum] instanceof MineNode){
+                countMines++;
+            }
+        }
+        
+        if((colNum +1 < 10) && (rowNum -1 > -1)){
+            if(buttons[rowNum -1][colNum+1] instanceof MineNode){
+                countMines++;
+            }
+        }
+        
+        if(colNum +1 < 10){
+            if(buttons[rowNum][colNum+1] instanceof MineNode){
+                countMines++;
+            }
+        }
+        
+        if(colNum +1 < 10 && rowNum +1 < 10){
+            if(buttons[rowNum+1][colNum+1] instanceof MineNode){
+                countMines++;
+            }
+        }
+
+        return countMines;
     }
     
     public static void main(String[] args) {
