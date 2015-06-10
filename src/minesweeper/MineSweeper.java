@@ -11,10 +11,17 @@ import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.event.*;
 import java.util.Random;
-
 import javafx.application.Application;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+
 
 public class MineSweeper extends Application{
+    
+    public static int countFreeNodes = 0;
+    
     @Override
     public void start(Stage sweeperStage){
         //Setting up outer pane to hold all of the components
@@ -36,13 +43,14 @@ public class MineSweeper extends Application{
         //Function to populate the mine field
         populateMineField(mineField, boardButtons);
         
+        
         //Event handler
         for(int i = 0; i<10;i++){
             for(int j = 0; j<10; j++){
                 boardButtons[i][j].setOnAction((e)-> {
                     Button nodeClicked = (Button)e.getSource();
-                    mineClick(mineField, nodeClicked);
                     int surroundingMines = countMines(boardButtons, nodeClicked);
+                    mineClick(nodeClicked, mineField, surroundingMines);
                 });
             }
         }
@@ -79,17 +87,28 @@ public class MineSweeper extends Application{
         }
     }
     
-    public void mineClick(GridPane board, Button nodeClicked){
+    public void mineClick(Button nodeClicked, GridPane board, int surrounding){
         if(nodeClicked instanceof MineNode) {
             nodeClicked.setStyle("-fx-background-color:black;" +
                     "-fx-background-radius: 0;"
                     + "-fx-border-color:gray;");
+            System.out.println("Game over - Mine Pressed");
+            System.exit(0);
         } 
         else {
-            nodeClicked.setStyle("-fx-background-color:blue;" +
+            nodeClicked.setStyle("-fx-background-color:lightblue;" +
                     "-fx-background-radius: 0;"
                     + "-fx-border-color:gray;");
+            addSurroundingMines(board, nodeClicked, surrounding);
+            countFreeNodes++;
+            didUserWin(countFreeNodes);
         }
+    }
+    
+    public void addSurroundingMines(GridPane board, Button nodeClicked, int surrounding){
+        Label numOfMines = new Label(" " + ((Integer)surrounding).toString());
+        numOfMines.setFont(Font.font("SansSerif", FontWeight.NORMAL, FontPosture.REGULAR, 14));
+        board.add(numOfMines, GridPane.getColumnIndex(nodeClicked), GridPane.getRowIndex(nodeClicked));
     }
     
     public void generateTop(HBox topBox){
@@ -163,6 +182,13 @@ public class MineSweeper extends Application{
         }
 
         return countMines;
+    }
+    
+    public static void didUserWin(int totalUncoveredNodes){
+        if(totalUncoveredNodes ==90){
+            System.out.println("User won!");
+            System.exit(0);
+        }
     }
     
     public static void main(String[] args) {
