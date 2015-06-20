@@ -111,17 +111,18 @@ public class MineSweeper extends Application{
         board.add(numOfMines, GridPane.getColumnIndex(nodeClicked), GridPane.getRowIndex(nodeClicked));
     }
     
+    //Generates the top of the frame with the smiley face, timer, and nodes left
     public void generateTop(HBox topBox){
         //Setting up nodes for the top pane (smiley, timer, minesLeft
         Image smiley = new Image("smiley.png");
         ImageView smileyPane = new ImageView(smiley);
         Rectangle timer = new Rectangle(0,0,35,35);
         timer.setFill(Color.BLACK);
-        Rectangle minesLeft = new Rectangle(0,0,35,35);
-        minesLeft.setFill(Color.BLACK);
+        Rectangle freeNodesLeft = new Rectangle(0,0,35,35);
+        freeNodesLeft.setFill(Color.BLACK);
         
         topBox.setAlignment(Pos.CENTER);
-        topBox.getChildren().addAll(timer, smileyPane, minesLeft);
+        topBox.getChildren().addAll(timer, smileyPane, freeNodesLeft);
     }
     
     public void executeStage(BorderPane outerBox, Stage sweeperStage){
@@ -132,6 +133,7 @@ public class MineSweeper extends Application{
         sweeperStage.show();
     }
     
+    //Returns the number of mines that surround the clicked node
     public int countMines(Button [][] buttons, Button buPressed){
         int rowNum = GridPane.getRowIndex(buPressed);
         int colNum = GridPane.getColumnIndex(buPressed);
@@ -195,11 +197,9 @@ public class MineSweeper extends Application{
            Application.launch(args);
     }
     
-    class MineNode extends Button{
-        
+    class MineNode extends Button{ 
     }
     
     class FreeNode extends Button{
-        
     }
 }
