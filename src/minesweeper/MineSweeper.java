@@ -19,7 +19,7 @@ import javafx.scene.text.Text;
 
 
 public class MineSweeper extends Application{
-    
+    //Increments when a free node is clicked
     public static int countFreeNodes = 0;
     
     @Override
@@ -87,6 +87,7 @@ public class MineSweeper extends Application{
         }
     }
     
+    //Determines if the button clicked is a mine or not. Executes appropriate response
     public void mineClick(Button nodeClicked, GridPane board, int surrounding){
         if(nodeClicked instanceof MineNode) {
             nodeClicked.setStyle("-fx-background-color:black;" +
@@ -105,6 +106,7 @@ public class MineSweeper extends Application{
         }
     }
     
+    //Displays the number of mines surrounding a clicked node
     public void addSurroundingMines(GridPane board, Button nodeClicked, int surrounding){
         Label numOfMines = new Label(" " + ((Integer)surrounding).toString());
         numOfMines.setFont(Font.font("SansSerif", FontWeight.NORMAL, FontPosture.REGULAR, 14));
@@ -125,6 +127,7 @@ public class MineSweeper extends Application{
         topBox.getChildren().addAll(timer, smileyPane, freeNodesLeft);
     }
     
+    //Sets the scene and shows the stage for the GUI
     public void executeStage(BorderPane outerBox, Stage sweeperStage){
         Scene scene = new Scene(outerBox);
         sweeperStage.setTitle("My Sweeper Clone");
@@ -186,6 +189,7 @@ public class MineSweeper extends Application{
         return countMines;
     }
     
+    //Determines if the user won the game.
     public static void didUserWin(int totalUncoveredNodes){
         if(totalUncoveredNodes ==90){
             System.out.println("User won!");
@@ -193,13 +197,14 @@ public class MineSweeper extends Application{
         }
     }
     
-    public static void main(String[] args) {
+    //Two classes to utilize instance of when determining the type of node
+    class MineNode extends Button{ 
+    }
+    class FreeNode extends Button{
+    }
+    
+     public static void main(String[] args) {
            Application.launch(args);
     }
     
-    class MineNode extends Button{ 
-    }
-    
-    class FreeNode extends Button{
-    }
 }
